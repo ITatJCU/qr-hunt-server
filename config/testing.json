@@ -1,0 +1,14 @@
+{
+    "port": 8082,
+    "app": {
+        "name": "« Testing » QR-Hunt Server"
+    },
+    "database": {
+        "dialect": "sqlite",
+        "host": ":memory:",
+        "port": "",
+        "username": "",
+        "password": "",
+        "storage": "hunter-tests.sqlite"
+    }
+}
