@@ -147,11 +147,9 @@ module.exports = {
         var i = 0;
         var id = null;
         var insertFunction = function (code) {
-
             if (!id && code) {
                 id = code.uuid;
             }
-
             if (i < qrCodes.length) {
                 dao.create(qrCodes[i], insertFunction);
             } else {
@@ -165,5 +163,28 @@ module.exports = {
         };
 
         insertFunction();
+    },
+
+    testRemove: function (test) {
+        var dao = new DAO(Code);
+
+        var i = 0;
+        var id = null;
+        var insertFunction = function (code) {
+            if (!id && code) {
+                id = code.uuid;
+            }
+            if (i < qrCodes.length) {
+                dao.create(qrCodes[i], insertFunction);
+            } else {
+                dao.remove(id, function (err) {
+                    test.ok(!err);
+                    test.done();
+                });
+            }
+            i++;
+        };
+        insertFunction();
+
     }
 };
