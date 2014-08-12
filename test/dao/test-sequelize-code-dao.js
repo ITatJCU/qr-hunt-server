@@ -139,5 +139,29 @@ module.exports = {
         };
 
         insertFunction();
+    },
+
+    testFindById:function(test){
+        var dao = new DAO(Code);
+
+        var i = 0;
+        var insertFunction = function () {
+            if (i < qrCodes.length) {
+                dao.create(qrCodes[i], insertFunction);
+            } else {
+                dao.findById(function (codes, err) {
+
+                    test.equals(codes.length, 3);
+                    test.equals(codes[0].title, 'IT@JCU Main Display');
+                    test.equals(codes[1].title, 'Structural Engineering Display');
+                    test.equals(codes[2].title, 'Mystery Prize');
+
+                    test.done();
+                });
+            }
+            i++;
+        };
+
+        insertFunction();
     }
 };
