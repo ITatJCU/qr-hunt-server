@@ -13,4 +13,7 @@ switch (process.env.NODE_ENV) {
         config = require('./development.json');
 }
 
+config.database.force = (config.database.force) ? config.database.force : false;
+
+
 module.exports = config;

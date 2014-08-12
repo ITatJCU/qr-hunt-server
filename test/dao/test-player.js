@@ -13,24 +13,20 @@ module.exports = {
                     name: playerAlias,
                     uuid: fingerprint
                 }).success(function (player) {
-
+                    test.equals(player.name, playerAlias);
+                    test.equals(player.uuid, fingerprint);
+                    callback();
+                }).failure(function (err) {
+                    test.ok(false, err);
+                    callback();
                 });
+            }).success(function () {
+                callback();
             });
-        callback();
     },
     tearDown: function (callback) {
         // clean up
         callback();
-    },
-    testInitialPlayerCreated: function (test) {
-        Player.all().success(function (players) {
-            test.equals(players.count, 1);
-            test.equals(players[0].name, playerAlias);
-            test.equals(players[0].uuid, fingerprint);
-        }).failure(function (err) {
-            test.ok(false, err);
-        });
-        test.done();
     },
     testCreate: function (test) {
         sequelize.transaction(function (t) {
@@ -40,12 +36,16 @@ module.exports = {
             ).success(function () {
                     Player.all({ transaction: t })
                         .success(function (players) {
-                            test.equals(players.count, 2);
+                            test.equals(players.length, 2);
+                            test.done();
                         }).failure(function (err) {
                             test.ok(false, err);
+                            test.done();
                         });
+                }).failure(function (err) {
+                    test.ok(false, err);
+                    test.done();
                 })
         });
-        test.done();
     }
 };

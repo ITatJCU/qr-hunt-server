@@ -9,6 +9,7 @@
         "port": "",
         "username": "",
         "password": "",
-        "storage": "hunter-tests.sqlite"
+        "storage": "hunter-tests.sqlite",
+        "force": true
     }
 }
