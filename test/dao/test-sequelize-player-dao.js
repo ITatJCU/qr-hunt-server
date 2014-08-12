@@ -165,5 +165,19 @@ module.exports = {
                 test.done();
             });
         });
+    },
+
+    testReset: function (test) {
+        var dao = new DAO(Player);
+
+        dao.create({uuid: 100, alias: 'Player'}, function (player, err) {
+            test.equals(player.resetAt, null);
+            dao.reset(player.uuid, function (p, e) {
+                test.equals(p.alias, 'Player');
+                test.equals(p.uuid, 100);
+                test.ok(p.resetAt);
+                test.done();
+            })
+        })
     }
 };
