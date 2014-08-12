@@ -185,6 +185,30 @@ module.exports = {
             i++;
         };
         insertFunction();
+    },
+    testSave: function (test) {
+        var dao = new DAO(Code);
 
+        var qr = {
+            title: 'IT@JCU Central Display',
+            content: 'Need we say more?',
+            locationX: 123.12,
+            locationY: 321.23,
+            gameIndex: 0
+        };
+
+        dao.create(qr, function (code, err) {
+            qr.id = code.id;
+
+            qr.gameIndex = 23;
+            qr.locationX = 0;
+
+            dao.save(qr, function (c, e) {
+                test.ok(!e);
+                test.equals(c.gameIndex, 23);
+                test.equals(c.locationX, 0);
+                test.done();
+            });
+        });
     }
 };
