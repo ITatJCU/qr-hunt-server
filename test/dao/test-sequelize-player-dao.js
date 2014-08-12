@@ -7,10 +7,7 @@ var DAO = require('../../lib/dao/sequelize-player-dao');
 
 module.exports = {
     setUp: function (callback) {
-        sequelize.authenticate()
-            .complete(function () {
-                callback();
-            });
+        callback();
     },
     tearDown: function (callback) {
         // clean up
