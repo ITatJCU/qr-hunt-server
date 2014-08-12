@@ -125,5 +125,32 @@ module.exports = {
         };
 
         insertFunction();
+    },
+    testRemove: function (test) {
+        var dao = new DAO(Player);
+
+        var players = [
+            {uuid: 876, alias: 'HAL'},
+            {uuid: 543, alias: 'KITT'},
+            {uuid: 210, alias: 'KAR'}
+        ];
+
+        var i = 0;
+        var insertFunction = function () {
+            if (i < players.length) {
+                dao.create(players[i], insertFunction);
+            } else {
+                dao.count(function (total, err) {
+                    test.equals(total, 3);
+                    dao.remove(876, function (err) {
+                        test.ok(!!err, 'Error removing Player from storage.');
+                        test.done();
+                    })
+                });
+            }
+            i++;
+        };
+
+        insertFunction();
     }
 };
