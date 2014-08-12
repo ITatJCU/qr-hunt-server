@@ -30,7 +30,7 @@ module.exports = {
 
         var dao = new DAO(Player);
         dao.create(somePlayer, function (result, err) {
-            test.ok(result, 'Player not created or returned. Database Error.' + err);
+            test.ok(result, 'Code not created or returned. Database Error.' + err);
 
             if (result) {
                 test.equals(somePlayer.alias, result.alias);
