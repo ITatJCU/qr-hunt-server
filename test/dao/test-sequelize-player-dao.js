@@ -7,7 +7,11 @@ var DAO = require('../../lib/dao/sequelize-player-dao');
 
 module.exports = {
     setUp: function (callback) {
-        callback();
+
+        //Reset the database table for each test
+        Player.sync({force: true}).complete(function () {
+            callback();
+        });
     },
     tearDown: function (callback) {
         // clean up
@@ -39,12 +43,30 @@ module.exports = {
     testCount: function (test) {
         var dao = new DAO(Player);
 
-        dao.count(function (total, err) {
-            //Tests are executed in order as written within each file (and assumed alphabetical by file name).
-            //There should be at least one Player in the database from the 'testCreate' method above.
+        var players = [
+            {uuid: 1, alias: 'PlayerOne'},
+            {uuid: 2, alias: 'PlayerTwo'},
+            {uuid: 3, alias: 'PlayerThree'}
+        ];
 
-            test.ok(total >= 1, 'No records persist in the database. ' + err);
-            test.done();
-        });
+        var i = 0;
+        var insertFunction = function () {
+            if (i < players.length) {
+                dao.create(players[i], insertFunction);
+            } else {
+                dao.count(function (total, err) {
+                    test.equals(total, 3);
+                    test.done();
+                });
+            }
+            i++;
+        };
+
+        insertFunction();
+
+    },
+    testAll: function (test) {
+
+        test.done();
     }
 };
