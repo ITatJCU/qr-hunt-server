@@ -152,5 +152,18 @@ module.exports = {
         };
 
         insertFunction();
+    },
+
+    testSave: function (test) {
+        var dao = new DAO(Player);
+
+        dao.create({uuid: 1010, alias: 'Caff'}, function (player, err) {
+            dao.save({uuid: 1010, alias: 'NotCaff'}, function (player, err) {
+                test.ok(!err);
+                test.equals(player.alias, 'NotCaff');
+                test.equals(player.uuid, 1010);
+                test.done();
+            });
+        });
     }
 };
