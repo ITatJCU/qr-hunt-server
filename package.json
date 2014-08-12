@@ -16,7 +16,6 @@
     "Server"
   ],
   "dependencies": {
-    "node-uuid": "^1.4.1",
     "restify": "2.8.2",
     "sequelize": "^1.7.9",
     "sqlite3": "^2.2.7"

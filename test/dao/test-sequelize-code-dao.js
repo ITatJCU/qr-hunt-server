@@ -141,21 +141,23 @@ module.exports = {
         insertFunction();
     },
 
-    testFindById:function(test){
+    testFindById: function (test) {
         var dao = new DAO(Code);
 
         var i = 0;
-        var insertFunction = function () {
+        var id = null;
+        var insertFunction = function (code) {
+
+            if (!id && code) {
+                id = code.uuid;
+            }
+
             if (i < qrCodes.length) {
                 dao.create(qrCodes[i], insertFunction);
             } else {
-                dao.findById(function (codes, err) {
-
-                    test.equals(codes.length, 3);
-                    test.equals(codes[0].title, 'IT@JCU Main Display');
-                    test.equals(codes[1].title, 'Structural Engineering Display');
-                    test.equals(codes[2].title, 'Mystery Prize');
-
+                dao.findById(id, function (qr, err) {
+                    test.equals(qr.uuid, id);
+                    test.ok(qr.title);
                     test.done();
                 });
             }
