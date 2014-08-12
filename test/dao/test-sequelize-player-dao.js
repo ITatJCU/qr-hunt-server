@@ -66,7 +66,64 @@ module.exports = {
 
     },
     testAll: function (test) {
+        var dao = new DAO(Player);
 
-        test.done();
+        var players = [
+            {uuid: 123456789, alias: 'Alex'},
+            {uuid: 987654321, alias: 'Tim'},
+            {uuid: 456789123, alias: 'Mindi'}
+        ];
+
+        var i = 0;
+        var insertFunction = function () {
+            if (i < players.length) {
+                dao.create(players[i], insertFunction);
+            } else {
+                dao.all(function (players, err) {
+                    test.equals(players.length, 3);
+
+                    test.equals(players[0].alias, 'Alex');
+                    test.equals(players[0].uuid, 123456789);
+
+                    test.equals(players[1].alias, 'Mindi');
+                    test.equals(players[1].uuid, 456789123);
+
+                    test.equals(players[2].alias, 'Tim');
+                    test.equals(players[2].uuid, 987654321);
+
+                    test.done();
+                });
+            }
+            i++;
+        };
+
+        insertFunction();
+    },
+
+    testFindById: function (test) {
+
+        var dao = new DAO(Player);
+
+        var players = [
+            {uuid: 123456, alias: 'Kitt'},
+            {uuid: 987654321, alias: 'Tim'},
+            {uuid: 456789123, alias: 'Mindi'}
+        ];
+
+        var i = 0;
+        var insertFunction = function () {
+            if (i < players.length) {
+                dao.create(players[i], insertFunction);
+            } else {
+                dao.findById(123456, function (player, err) {
+                    test.equals(player.alias, 'Kitt');
+                    test.equals(player.uuid, 123456);
+                    test.done();
+                });
+            }
+            i++;
+        };
+
+        insertFunction();
     }
 };
