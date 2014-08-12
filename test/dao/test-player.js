@@ -7,19 +7,11 @@ var fingerprint = 1446914009;
 
 module.exports = {
     setUp: function (callback) {
-        Player.find(fingerprint)
-            .failure(function (err) {
-                Player.create({
-                    alias: playerAlias,
-                    uuid: fingerprint
-                }).success(function (player) {
-                    callback();
-                }).failure(function (err) {
-                    test.ok(false, err);
+        sequelize.authenticate()
+            .complete(function () {
+                Player.findOrCreate(fingerprint, {alias: playerAlias, uuid: fingerprint}).complete(function () {
                     callback();
                 });
-            }).success(function () {
-                callback();
             });
     },
     tearDown: function (callback) {
@@ -27,28 +19,19 @@ module.exports = {
         callback();
     },
     testCreate: function (test) {
-        sequelize.transaction(function (t) {
-            Player.create(
-                { uuid: 1446914010, alias: 'Alex' },
-                { transaction: t }
-            ).success(function () {
 
-                    Player.all({ transaction: t })
-                        .success(function (players) {
-                            test.equals(players.length, 2);
-                            test.equals(players[1].alias, 'Alex');
-                            test.equals(players[1].uuid, 1446914010);
-                            test.done();
-                        }).failure(function (err) {
-                            test.ok(false, err);
-                            test.done();
-                        });
+        var p = Player.build({
+            uuid: 1446914010,
+            alias: 'Alex'
+        });
 
-                }).failure(function (err) {
-                    test.ok(false, err);
-                    test.done();
-                })
-
+        p.save().complete(function (err) {
+            if (!!err) {
+                test.ok(false, err);
+            } else {
+                test.ok(true);
+            }
+            test.done();
         });
     }
 };
