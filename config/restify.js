@@ -12,6 +12,7 @@ var server = Restify.createServer({
         }
     }
 });
+
 server.use(Restify.acceptParser(server.acceptable));
 server.use(Restify.authorizationParser());
 server.use(Restify.dateParser());
@@ -30,6 +31,7 @@ server.use(Restify.throttle({
         }
     }
 }));
+
 server.use(Restify.conditionalRequest());
 
 Restify.CORS.ALLOW_HEADERS.push('accept');

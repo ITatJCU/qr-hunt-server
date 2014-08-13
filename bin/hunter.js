@@ -2,6 +2,13 @@ var FS = require('fs');
 var config = require('../config');
 var server = require('../config/restify');
 
+var DAO = require('../lib/dao/dao');
+var SequelizeDAO = require('../lib/dao/sequelize-dao');
+
+var dao = new DAO();
+dao.setFactory(new SequelizeDAO());
+server.dao = dao;
+
 //Initialise the loggers
 require('../config/loggers')(server);
 
@@ -22,7 +29,7 @@ function initialiseServer() {
 
 function initialiseRoutes() {
     LogEventDispatcher.log('Loading routes...');
-    var routes = './lib/routes';
+    var routes = __dirname + '/routes';
 
     FS.readdirSync(routes).forEach(function (file) {
         LogEventDispatcher.log('\t' + file);

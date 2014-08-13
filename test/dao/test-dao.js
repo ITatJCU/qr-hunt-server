@@ -3,7 +3,6 @@ var DAO = require('../../lib/dao/dao');
 
 var DAOFactory = require('../../lib/dao/dao-factory');
 
-
 function MockFactory() {
 
 }
@@ -16,7 +15,6 @@ DAO.prototype.playerDAO = function () {
 DAO.prototype.codeDAO = function () {
     return 'CodeDAO Impl';
 };
-
 
 exports['testSetFactory'] = function (test) {
     var dao = new DAO();
