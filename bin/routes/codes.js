@@ -1,15 +1,17 @@
-var DAOFactory =
-
 module.exports = function (server) {
 
     /**
-     * Gets information about the current player.
-     * Note: Creates the player if not existing.
+     * Gets all available QR Codes from the database
      */
-    server.get('/player', function (req, res, next) {
-        //DAO Find()
-        //If null
-        //  DAO Create
-        //Player Return
+    server.get('/codes', function (req, res, next) {
+
+        server.dao.codeDAO.all(function (results, err) {
+            if (!err) {
+                res.send(200, results);
+            } else {
+                res.send(500, 'Database Error Detected.');
+            }
+        })
+
     })
 };
