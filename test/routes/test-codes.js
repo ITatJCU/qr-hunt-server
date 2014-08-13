@@ -81,5 +81,42 @@ module.exports = {
                 }
             });
 
+    }, testCreateGameCode: function (test) {
+
+        createClient().put(
+            '/codes',
+            {
+                title: 'Game Code 1',
+                gameIndex: 1,
+                locationX: 12.50,
+                locationY: 7.25,
+                content: 'Main IT Display'
+            },
+            function (err, req, res, data) {
+                if (err) {
+                    throw new Error(err);
+                } else {
+                    createClient().get('/gameCodes', function (err, req, res, data) {
+                        if (err) {
+                            throw new Error(err);
+                        } else {
+                            test.equals(res.statusCode, 200);
+                            test.ok(data instanceof Array);
+                            test.ok(data.length >= 1);
+
+                            var index = data.length - 1;
+
+                            test.equals(data[index].title, 'Game Code 1');
+                            test.equals(data[index].gameIndex, 1);
+                            test.equals(data[index].locationX, 12.5);
+                            test.equals(data[index].locationY, 7.25);
+                            test.equals(data[index].content, 'Main IT Display');
+
+                            test.done();
+                        }
+                    });
+                }
+            });
+
     },
 };
