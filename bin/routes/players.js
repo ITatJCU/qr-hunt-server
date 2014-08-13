@@ -18,4 +18,23 @@ module.exports = function (server) {
         });
     });
 
+    server.put('/players', function (req, res, next) {
+        //Validate minimum requirements
+
+        var player = req.params;
+
+        if (player.uuid && player.uuid != '') {
+            server.dao.playerDAO().create(player, function (createdPlayer, err) {
+                if (!err) {
+                    res.send(201, createdPlayer);
+                } else {
+                    res.send(500, 'Database Error Detected');
+                }
+                return next();
+            });
+        } else {
+            res.send(400, 'No player UUID specified');
+            return next();
+        }
+    });
 };

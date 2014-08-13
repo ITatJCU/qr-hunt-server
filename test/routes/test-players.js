@@ -18,13 +18,54 @@ module.exports = {
         callback();
     },
     testNoPlayerFound: function (test) {
-
         createClient().get(
             '/player/999999',
             function (err, req, res, data) {
                 test.equals(res.statusCode, 404);
                 test.equals(err.body, 'Player not found');
                 test.done();
+            });
+    },
+    testCreatePlayer: function (test) {
+        createClient().put(
+            '/players',
+            {
+                uuid: 1446914009
+            },
+            function (err, req, res, data) {
+                if (err) {
+                    throw new Error(err);
+                } else {
+                    test.equals(res.statusCode, 201);
+                    test.ok(data instanceof Object);
+                    test.equals(data.uuid, 1446914009);
+                    test.done();
+                }
+            });
+    },
+    testCreateAndRetrievePlayer: function (test) {
+        createClient().put(
+            '/players',
+            {
+                uuid: 1446914010,
+                alias: 'Hoxton'
+            },
+            function (err, req, res, data) {
+                if (err) {
+                    throw new Error(err);
+                } else {
+                    createClient().get('/player/1446914010', function (err, req, res, data) {
+                        if (err) {
+                            throw new Error(err);
+                        } else {
+                            test.equals(res.statusCode, 200);
+                            test.ok(data instanceof Object);
+                            test.equals(data.alias, 'Hoxton');
+                            test.equals(data.uuid, 1446914010);
+                            test.done();
+                        }
+                    });
+                }
             });
     }
 };
