@@ -12,7 +12,17 @@ module.exports = function (server) {
                 res.send(500, 'Database Error Detected.');
             }
             return next();
-        })
+        });
 
-    })
+    });
+
+    /**
+     * Adds a QR Code to the database
+     */
+    server.put('/codes', function (req, res, next) {
+        //Validate minimum requirements
+        
+        //Put in DB
+        //Return
+    });
 };

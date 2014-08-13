@@ -14,7 +14,7 @@ require('../config/loggers')(server);
 
 var LogEventDispatcher = require('../lib/utilities/log-event-dispatcher');
 
-function initialiseServer() {
+function start(callback) {
     LogEventDispatcher.log('Initialising API Server...');
     server.listen(config.port, function (err) {
         if (!!err) {
@@ -23,6 +23,10 @@ function initialiseServer() {
         } else {
             LogEventDispatcher.log('\t' + config.app.name + ' listening at ' + server.url);
             initialiseRoutes();
+        }
+
+        if (callback) {
+            callback();
         }
     });
 }
@@ -37,4 +41,4 @@ function initialiseRoutes() {
     });
 }
 
-initialiseServer();
+module.exports.start = start;
