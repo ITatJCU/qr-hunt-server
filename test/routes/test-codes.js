@@ -17,16 +17,32 @@ module.exports = {
         // clean up
         callback();
     },
-    testIndex: function (test) {
-
+    testAllCodes: function (test) {
 
         createClient().get('/codes', function (err, req, res, data) {
             if (err) {
                 throw new Error(err);
             } else {
                 test.equals(res.statusCode, 200);
+                test.ok(data instanceof Array);
                 test.done();
             }
         });
+    },
+    testValidAddCode: function (test) {
+
+        createClient().put(
+            '/codes',
+            { title: 'Test QR-Code' },
+            function (err, req, res, data) {
+                if (err) {
+                    throw new Error(err);
+                } else {
+                    test.equals(res.statusCode, 201);
+                    test.ok(data instanceof Object);
+                    test.equals(data.title, 'Test QR-Code');
+                    test.done();
+                }
+            });
     }
 };

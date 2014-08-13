@@ -22,7 +22,21 @@ module.exports = function (server) {
     server.put('/codes', function (req, res, next) {
         //Validate minimum requirements
 
-        //Put in DB
-        //Return
+        var code = req.params;
+
+        if (code.title && code.title != '') {
+            server.dao.codeDAO().create(code, function (result, err) {
+                if (!err) {
+                    res.send(201, result);
+                } else {
+                    res.send(500, 'Database Error Detected.');
+                }
+                return next();
+            });
+        } else {
+            res.send(400, 'Invalid QR Code');
+            return next();
+        }
+
     });
 };
