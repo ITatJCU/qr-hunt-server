@@ -14,3 +14,10 @@ exports['testDefaultRecorder'] = function (test) {
     test.equals(l.getRecorder(), null);
     test.done();
 };
+
+exports['testNullSetStrategy'] = function (test) {
+    var l = new Logger();
+    l.setStrategy(null);
+    test.ok(LoggerStrategy.prototype.isPrototypeOf(l.strategy()));
+    test.done();
+};
