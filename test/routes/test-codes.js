@@ -58,5 +58,28 @@ module.exports = {
                 test.equals(err.body, 'Invalid QR Code');
                 test.done();
             });
-    }
+    }, testAllCodesAgain: function (test) {
+
+        createClient().put(
+            '/codes',
+            { title: 'Here is a code to find' },
+            function (err, req, res, data) {
+                if (err) {
+                    throw new Error(err);
+                } else {
+                    createClient().get('/codes', function (err, req, res, data) {
+                        if (err) {
+                            throw new Error(err);
+                        } else {
+                            test.equals(res.statusCode, 200);
+                            test.ok(data instanceof Array);
+                            test.ok(data.length >= 1);
+                            test.equals(data[data.length - 1].title, 'Here is a code to find');
+                            test.done();
+                        }
+                    });
+                }
+            });
+
+    },
 };
