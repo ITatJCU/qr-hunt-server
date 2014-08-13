@@ -1,0 +1,10 @@
+var Recorder = require('../../lib/utilities/recorder');
+var Logger = require('../../lib/utilities/strategy-logger');
+var LoggerStrategy = require('../../lib/utilities/logger-strategy');
+var recorder = new Recorder();
+
+exports['testConstructor'] = function (test) {
+    var l = new Logger();
+    test.ok(LoggerStrategy.prototype.isPrototypeOf(l.strategy()));
+    test.done();
+};
