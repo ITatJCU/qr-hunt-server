@@ -21,3 +21,10 @@ exports['testNullSetStrategy'] = function (test) {
     test.ok(LoggerStrategy.prototype.isPrototypeOf(l.strategy()));
     test.done();
 };
+
+exports['testEmptySetStrategy'] = function (test) {
+    var l = new Logger();
+    l.setStrategy();
+    test.ok(LoggerStrategy.prototype.isPrototypeOf(l.strategy()));
+    test.done();
+};
