@@ -35,3 +35,19 @@ exports['testRemoveRecorder'] = function (test) {
     test.strictEqual(cr.size(), 3);
     test.done();
 };
+
+exports['testRemoveNonRecorder'] = function (test) {
+    cr.remove({});
+    test.strictEqual(cr.size(), 3);
+    cr.remove(null);
+    test.strictEqual(cr.size(), 3);
+    cr.remove("");
+    test.strictEqual(cr.size(), 3);
+    test.done();
+};
+
+exports['testClear'] = function (test) {
+    cr.clear();
+    test.strictEqual(cr.size(), 0);
+    test.done();
+};
