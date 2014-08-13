@@ -5,12 +5,13 @@ module.exports = function (server) {
      */
     server.get('/codes', function (req, res, next) {
 
-        server.dao.codeDAO.all(function (results, err) {
+        server.dao.codeDAO().all(function (results, err) {
             if (!err) {
                 res.send(200, results);
             } else {
                 res.send(500, 'Database Error Detected.');
             }
+            return next();
         })
 
     })
