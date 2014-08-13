@@ -44,5 +44,19 @@ module.exports = {
                     test.done();
                 }
             });
+    }, testInvalidAddCode: function (test) {
+
+        createClient().put(
+            '/codes',
+            {
+                notARealField: 'Should not be added',
+                someName: 'is Irrelevant',
+                someNumber: 123
+            },
+            function (err, req, res, data) {
+                test.equals(res.statusCode, 400);
+                test.equals(err.body, 'Invalid QR Code');
+                test.done();
+            });
     }
 };
