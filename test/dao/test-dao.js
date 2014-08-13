@@ -9,10 +9,10 @@ function MockFactory() {
 
 Util.inherits(MockFactory, DAOFactory);
 
-DAO.prototype.playerDAO = function () {
+MockFactory.prototype.playerDAO = function () {
     return 'PlayerDAO Impl';
 };
-DAO.prototype.codeDAO = function () {
+MockFactory.prototype.codeDAO = function () {
     return 'CodeDAO Impl';
 };
 

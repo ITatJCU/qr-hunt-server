@@ -21,7 +21,7 @@ module.exports = function (server) {
      */
     server.put('/codes', function (req, res, next) {
         //Validate minimum requirements
-        
+
         //Put in DB
         //Return
     });
