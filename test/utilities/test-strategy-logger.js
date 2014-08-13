@@ -8,3 +8,9 @@ exports['testConstructor'] = function (test) {
     test.ok(LoggerStrategy.prototype.isPrototypeOf(l.strategy()));
     test.done();
 };
+
+exports['testDefaultRecorder'] = function (test) {
+    var l = new Logger();
+    test.equals(l.getRecorder(), null);
+    test.done();
+};
