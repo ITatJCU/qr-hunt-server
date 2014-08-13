@@ -28,3 +28,17 @@ exports['testEmptySetStrategy'] = function (test) {
     test.ok(LoggerStrategy.prototype.isPrototypeOf(l.strategy()));
     test.done();
 };
+
+exports['testObjectSetStrategy'] = function (test) {
+    var l = new Logger();
+    l.setStrategy({});
+    test.ok(LoggerStrategy.prototype.isPrototypeOf(l.strategy()));
+    test.done();
+};
+
+exports['testSetRecorder'] = function (test) {
+    var l = new Logger();
+    l.setRecorder(recorder);
+    test.ok(Recorder.prototype.isPrototypeOf(l.getRecorder()));
+    test.done();
+};
