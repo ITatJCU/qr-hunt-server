@@ -67,5 +67,18 @@ module.exports = {
                     });
                 }
             });
+    },
+    testAllPlayers: function (test) {
+        createClient().get(
+            '/players',
+            function (err, req, res, data) {
+                if (err) {
+                    throw new Error(err);
+                } else {
+                    test.equals(res.statusCode, 200);
+                    test.ok(data instanceof Array);
+                    test.done();
+                }
+            });
     }
 };

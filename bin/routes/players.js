@@ -18,6 +18,16 @@ module.exports = function (server) {
         });
     });
 
+    server.get('/players', function (req, res, next) {
+        server.dao.playerDAO().all(function (players, err) {
+            if (err) {
+                res.send(500, 'Database Error Detected');
+            } else {
+                res.send(200, players);
+            }
+        });
+    });
+
     server.put('/players', function (req, res, next) {
         //Validate minimum requirements
 
