@@ -8,3 +8,12 @@ exports['testConstructor'] = function (test) {
     test.done();
 };
 
+exports['testAddNonRecorder'] = function (test) {
+    cr.add({});
+    test.strictEqual(cr.size(), 0);
+    cr.add(null);
+    test.strictEqual(cr.size(), 0);
+    cr.add("");
+    test.strictEqual(cr.size(), 0);
+    test.done();
+};
