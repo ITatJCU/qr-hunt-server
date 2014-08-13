@@ -17,3 +17,21 @@ exports['testAddNonRecorder'] = function (test) {
     test.strictEqual(cr.size(), 0);
     test.done();
 };
+
+exports['testAddRecorder'] = function (test) {
+    cr.add(new Recorder());
+    test.strictEqual(cr.size(), 1);
+    cr.add(new Recorder());
+    cr.add(new Recorder());
+    test.strictEqual(cr.size(), 3);
+    test.done();
+};
+
+exports['testRemoveRecorder'] = function (test) {
+    var r = new Recorder();
+    cr.add(r);
+    test.strictEqual(cr.size(), 4);
+    cr.remove(r);
+    test.strictEqual(cr.size(), 3);
+    test.done();
+};
