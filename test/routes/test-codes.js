@@ -5,7 +5,7 @@ function createClient() {
         version: '*',
         url: 'http://127.0.0.1:8082'
     });
-};
+}
 
 module.exports = {
     setUp: function (callback) {
