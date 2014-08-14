@@ -20,18 +20,11 @@ module.exports = {
     },
     testCreate: function (test) {
 
-        var p = Player.build({
-            uuid: 1446914010,
-            alias: 'Alex'
-        });
-
-        p.save().complete(function (err) {
-            if (!!err) {
-                test.ok(false, err);
-            } else {
-                test.ok(true);
-            }
-            test.done();
-        });
+        Player.findOrCreate(
+            { uuid: 1446914010}, { alias: 'Alex' }
+        ).complete(function (err, player) {
+                test.ok(!err);
+                test.done();
+            });
     }
 };

@@ -10,6 +10,6 @@
         "username": "",
         "password": "",
         "storage": "hunter-tests.sqlite",
-        "force": true
+        "force": false
     }
 }

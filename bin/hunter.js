@@ -41,4 +41,5 @@ function initialiseRoutes() {
     });
 }
 
+module.exports.server = server;
 module.exports.start = start;
