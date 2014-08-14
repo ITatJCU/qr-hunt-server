@@ -63,8 +63,6 @@ module.exports = {
                             test.equals(data.alias, 'Hoxton');
                             test.equals(data.uuid, 1446914010);
 
-                            test.ok(data.codes instanceof Array);
-                            test.equals(data.codes.length, 0);
                             test.done();
                         }
                     });

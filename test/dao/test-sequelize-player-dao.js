@@ -20,7 +20,7 @@ module.exports = {
         callback();
     },
     testConstructor: function (test) {
-        var dao = new DAO(Player, Code);
+        var dao = new DAO(sequelize, Player);
         test.equals(Player, dao.modelDefinition());
         test.done();
     },
@@ -30,7 +30,7 @@ module.exports = {
             uuid: 3307827260
         };
 
-        var dao = new DAO(Player, Code);
+        var dao = new DAO(sequelize, Player);
         dao.create(somePlayer, function (result, err) {
             test.ok(result, 'Code not created or returned. Database Error.' + err);
 
@@ -43,7 +43,7 @@ module.exports = {
         });
     },
     testCount: function (test) {
-        var dao = new DAO(Player, Code);
+        var dao = new DAO(sequelize, Player);
 
         var players = [
             {uuid: 1, alias: 'PlayerOne'},
@@ -68,7 +68,7 @@ module.exports = {
 
     },
     testAll: function (test) {
-        var dao = new DAO(Player, Code);
+        var dao = new DAO(sequelize, Player);
 
         var players = [
             {uuid: 123456789, alias: 'Alex'},
@@ -104,7 +104,7 @@ module.exports = {
 
     testFindById: function (test) {
 
-        var dao = new DAO(Player, Code);
+        var dao = new DAO(sequelize, Player);
 
         var players = [
             {uuid: 123456, alias: 'Kitt'},
@@ -129,7 +129,7 @@ module.exports = {
         insertFunction();
     },
     testRemove: function (test) {
-        var dao = new DAO(Player, Code);
+        var dao = new DAO(sequelize, Player);
 
         var players = [
             {uuid: 876, alias: 'HAL'},
@@ -157,7 +157,7 @@ module.exports = {
     },
 
     testSave: function (test) {
-        var dao = new DAO(Player, Code);
+        var dao = new DAO(sequelize, Player);
 
         dao.create({uuid: 1010, alias: 'Caff'}, function (player, err) {
             dao.save({uuid: 1010, alias: 'NotCaff'}, function (player, err) {
@@ -170,7 +170,7 @@ module.exports = {
     },
 
     testReset: function (test) {
-        var dao = new DAO(Player, Code);
+        var dao = new DAO(sequelize, Player);
 
         dao.create({uuid: 100, alias: 'Player'}, function (player, err) {
             test.equals(player.resetAt, null);
