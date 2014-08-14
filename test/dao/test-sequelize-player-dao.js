@@ -120,6 +120,7 @@ module.exports = {
                 dao.findById(123456, function (player, err) {
                     test.equals(player.alias, 'Kitt');
                     test.equals(player.uuid, 123456);
+                    test.ok(player.dataValues.scans instanceof Array);
                     test.done();
                 });
             }
@@ -173,11 +174,13 @@ module.exports = {
         var dao = new DAO(sequelize, Player);
 
         dao.create({uuid: 100, alias: 'Player'}, function (player, err) {
-            test.equals(player.resetAt, null);
+
+            var current = player.resetAt;
+
             dao.reset(player.uuid, function (p, e) {
                 test.equals(p.alias, 'Player');
                 test.equals(p.uuid, 100);
-                test.ok(p.resetAt);
+                test.ok(current != p.resetAt);
                 test.done();
             })
         })

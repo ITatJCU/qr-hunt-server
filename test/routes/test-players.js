@@ -83,23 +83,37 @@ module.exports = {
             });
     },
 
-    testAddCode: function (test) {
+    testAddCodes: function (test) {
         createClient().put(
             '/players',
             { uuid: 14469 },
             function (err, req, res, data) {
-                if (err) {
-                    throw new Error(err);
-                } else {
-                    createClient().put('/player/14469/12', function (err, req, res, data) {
-                        if (err) {
-                            throw new Error(err);
-                        } else {
+                test.ok(!err);
+                createClient().put('/codes',
+                    {
+                        title: 'New Game Code',
+                        gameIndex: 999999,
+                        content: 'Locale'
+                    },
+                    function (err, req, res, data) {
+                        test.ok(!err);
+
+                        createClient().put('/player/14469/' + data.id, {}, function (err, req, res, data) {
+                            test.ok(!err);
                             test.equals(res.statusCode, 201);
-                            test.done();
-                        }
+
+                            createClient().get('/player/14469', function (err, req, res, data) {
+                                test.ok(!err);
+                                test.ok(data.scans instanceof Array);
+                                test.ok(data.scans.length > 0);
+
+                                var scan = data.scans[data.scans.length - 1];
+                                test.equals(scan.gameIndex, 999999);
+                                test.equals(scan.title = 'New Game Code');
+                            })
+                        });
                     });
-                }
+
             });
     }
 };
