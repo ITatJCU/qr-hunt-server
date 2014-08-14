@@ -81,5 +81,25 @@ module.exports = {
                     test.done();
                 }
             });
+    },
+
+    testAddCode: function (test) {
+        createClient().put(
+            '/players',
+            { uuid: 14469 },
+            function (err, req, res, data) {
+                if (err) {
+                    throw new Error(err);
+                } else {
+                    createClient().put('/player/14469/12', function (err, req, res, data) {
+                        if (err) {
+                            throw new Error(err);
+                        } else {
+                            test.equals(res.statusCode, 201);
+                            test.done();
+                        }
+                    });
+                }
+            });
     }
 };

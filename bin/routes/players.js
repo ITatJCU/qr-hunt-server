@@ -47,4 +47,16 @@ module.exports = function (server) {
             return next();
         }
     });
+
+    server.put('/player/:playerId/:codeId', function (req, res, next) {
+
+        server.dao.playerDAO().addScan(req.params.playerId, req.params.codeId, function (result, err) {
+            if (!err) {
+                res.send(201, result);
+            } else {
+                res.send(500, 'Database Error: ' + err);
+            }
+            return next();
+        });
+    });
 };
