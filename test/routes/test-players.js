@@ -109,7 +109,8 @@ module.exports = {
 
                                 var scan = data.scans[data.scans.length - 1];
                                 test.equals(scan.gameIndex, 999999);
-                                test.equals(scan.title = 'New Game Code');
+                                test.equals(scan.title, 'New Game Code');
+                                test.done();
                             })
                         });
                     });

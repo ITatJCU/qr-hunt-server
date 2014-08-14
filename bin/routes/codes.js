@@ -9,7 +9,7 @@ module.exports = function (server) {
             if (!err) {
                 res.send(200, results);
             } else {
-                res.send(500, 'Database Error Detected');
+                res.send(500, 'Database Error: ' + err);
             }
             return next();
         });
@@ -25,7 +25,7 @@ module.exports = function (server) {
             if (!err) {
                 res.send(200, results);
             } else {
-                res.send(500, 'Database Error Detected');
+                res.send(500, 'Database Error: ' + err);
             }
             return next();
         });
@@ -45,7 +45,7 @@ module.exports = function (server) {
                 if (!err) {
                     res.send(201, result);
                 } else {
-                    res.send(500, 'Database Error Detected');
+                    res.send(500, 'Database Error: ' + err);
                 }
                 return next();
             });

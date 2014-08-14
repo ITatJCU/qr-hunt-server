@@ -8,7 +8,7 @@ module.exports = function (server) {
 
         server.dao.playerDAO().findById(req.params.id, function (player, err) {
             if (err) {
-                res.send(500, 'Database Error Detected');
+                res.send(500, 'Database Error: ' + err);
             } else if (player) {
                 res.send(200, player);
             } else {
@@ -21,7 +21,7 @@ module.exports = function (server) {
     server.get('/players', function (req, res, next) {
         server.dao.playerDAO().all(function (players, err) {
             if (err) {
-                res.send(500, 'Database Error Detected');
+                res.send(500, 'Database Error: ' + err);
             } else {
                 res.send(200, players);
             }
@@ -38,7 +38,7 @@ module.exports = function (server) {
                 if (!err) {
                     res.send(201, createdPlayer);
                 } else {
-                    res.send(500, 'Database Error Detected');
+                    res.send(500, 'Database Error: ' + err);
                 }
                 return next();
             });
