@@ -40,7 +40,16 @@ module.exports = function (server) {
 
         var code = req.params;
 
-        if (code.title && code.title != '') {
+        if (code.id && code.title && code.title != "") {
+            server.dao.codeDAO().save(code, function (result, err) {
+                if (!err) {
+                    res.send(201, result);
+                } else {
+                    res.send(500, 'Database Error: ' + err);
+                }
+                return next();
+            });
+        } else if (code.title && code.title != '') {
             server.dao.codeDAO().create(code, function (result, err) {
                 if (!err) {
                     res.send(201, result);
@@ -55,4 +64,5 @@ module.exports = function (server) {
         }
 
     });
+
 };

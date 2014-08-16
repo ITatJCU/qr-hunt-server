@@ -4,7 +4,7 @@ module.exports = function (server) {
      * Gets the player with the specified uuid
      * Note: Player UUID must be sent to distinguish.
      */
-    server.get('/player/:id', function (req, res, next) {
+    server.get('/players/:id', function (req, res, next) {
 
         server.dao.playerDAO().findById(req.params.id, function (player, err) {
             if (err) {
@@ -48,7 +48,7 @@ module.exports = function (server) {
         }
     });
 
-    server.put('/player/:playerId/:codeId', function (req, res, next) {
+    server.put('/players/:playerId/:codeId', function (req, res, next) {
 
         server.dao.playerDAO().addScan(req.params.playerId, req.params.codeId, function (result, err) {
             if (!err) {
