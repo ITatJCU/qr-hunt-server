@@ -19,7 +19,7 @@ module.exports = {
     },
     testNoPlayerFound: function (test) {
         createClient().get(
-            '/player/999999',
+            '/players/999999',
             function (err, req, res, data) {
                 test.equals(res.statusCode, 404);
                 test.equals(err.body, 'Player not found');

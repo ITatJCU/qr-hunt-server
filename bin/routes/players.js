@@ -59,4 +59,16 @@ module.exports = function (server) {
             return next();
         });
     });
+
+    server.put('/players/:playerId/reset', function (req, res, next) {
+
+        server.dao.playerDAO().reset(req.params.playerId, function (result, err) {
+            if (!err) {
+                res.send(201, result);
+            } else {
+                res.send(500, 'Database Error: ' + err);
+            }
+            return next();
+        });
+    });
 };
