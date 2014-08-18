@@ -33,7 +33,7 @@ module.exports = function (server) {
     });
 
     server.del('/codes/:id', function (req, res, next) {
-        server.dao.codeDAO().remove(req.id, function (result, err) {
+        server.dao.codeDAO().remove(req.params.id, function (err) {
             if (err) {
                 res.send(500, 'Database Error: ' + err);
             } else {
