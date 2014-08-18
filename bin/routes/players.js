@@ -17,7 +17,20 @@ module.exports = function (server) {
             return next();
         });
     });
+    server.put('/players/:id', function (req, res, next) {
+        var existingPlayer = req.params;
 
+        server.dao.playerDAO().save(existingPlayer, function (player, err) {
+            if (err) {
+                res.send(500, 'Database Error: ' + err);
+            } else if (player) {
+                res.send(200, player);
+            } else {
+                res.send(404, 'Player not found');
+            }
+            return next();
+        });
+    });
     server.get('/players', function (req, res, next) {
         server.dao.playerDAO().all(function (players, err) {
             if (err) {

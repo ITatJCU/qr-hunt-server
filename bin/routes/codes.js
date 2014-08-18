@@ -32,6 +32,17 @@ module.exports = function (server) {
 
     });
 
+    server.del('/codes/:id', function (req, res, next) {
+        server.dao.codeDAO().remove(req.id, function (result, err) {
+            if (err) {
+                res.send(500, 'Database Error: ' + err);
+            } else {
+                res.send(200, null);
+            }
+            return next();
+        });
+    });
+
     /**
      * Adds a QR Code to the database
      */
