@@ -18,6 +18,7 @@
   "dependencies": {
     "restify": "2.8.2",
     "sequelize": "^1.7.9",
+    "socket.io": "^1.0.6",
     "sqlite3": "^2.2.7"
   },
   "devDependencies": {

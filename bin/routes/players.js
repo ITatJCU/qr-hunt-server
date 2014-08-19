@@ -1,3 +1,5 @@
+var LogEventDispatcher = require('../../lib/utilities/log-event-dispatcher');
+
 module.exports = function (server) {
 
     /**
@@ -77,6 +79,9 @@ module.exports = function (server) {
         server.dao.playerDAO().addScan(req.params.playerId, req.params.codeId, function (result, err) {
             if (!err) {
                 res.send(201, result);
+                if (server.io) {
+                    server.io.sockets.emit('newScan', null);
+                }
             } else {
                 res.send(500, 'Database Error: ' + err);
             }
