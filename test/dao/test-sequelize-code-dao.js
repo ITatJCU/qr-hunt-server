@@ -148,13 +148,13 @@ module.exports = {
         var id = null;
         var insertFunction = function (code) {
             if (!id && code) {
-                id = code.uuid;
+                id = code.id;
             }
             if (i < qrCodes.length) {
                 dao.create(qrCodes[i], insertFunction);
             } else {
                 dao.findById(id, function (qr, err) {
-                    test.equals(qr.uuid, id);
+                    test.equals(qr.id, id);
                     test.ok(qr.title);
                     test.done();
                 });
