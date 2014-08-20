@@ -2,6 +2,8 @@ var models = require('../../lib/dao/models.js');
 var Player = models.Player;
 var Code = models.Code;
 
+var uuid = require('node-uuid');
+
 var sequelize = models.sequelize;
 
 var DAO = require('../../lib/dao/sequelize-player-dao');
@@ -27,7 +29,7 @@ module.exports = {
     testCreate: function (test) {
         var somePlayer = {
             alias: 'John Doe',
-            uuid: 3307827260
+            uuid: uuid.v4()
         };
 
         var dao = new DAO(sequelize, Player);
@@ -46,9 +48,9 @@ module.exports = {
         var dao = new DAO(sequelize, Player);
 
         var players = [
-            {uuid: 1, alias: 'PlayerOne'},
-            {uuid: 2, alias: 'PlayerTwo'},
-            {uuid: 3, alias: 'PlayerThree'}
+            {uuid: uuid.v4(), alias: 'PlayerOne'},
+            {uuid: uuid.v4(), alias: 'PlayerTwo'},
+            {uuid: uuid.v4(), alias: 'PlayerThree'}
         ];
 
         var i = 0;
@@ -70,28 +72,21 @@ module.exports = {
     testAll: function (test) {
         var dao = new DAO(sequelize, Player);
 
-        var players = [
-            {uuid: 123456789, alias: 'Alex'},
-            {uuid: 987654321, alias: 'Tim'},
-            {uuid: 456789123, alias: 'Mindi'}
+
+
+        var dataSet = [
+            {uuid: uuid.v4(), alias: 'Alex'},
+            {uuid: uuid.v4(), alias: 'Tim'},
+            {uuid: uuid.v4(), alias: 'Mindi'}
         ];
 
         var i = 0;
         var insertFunction = function () {
-            if (i < players.length) {
-                dao.create(players[i], insertFunction);
+            if (i < dataSet.length) {
+                dao.create(dataSet[i], insertFunction);
             } else {
                 dao.all(function (players, err) {
                     test.equals(players.length, 3);
-
-                    test.equals(players[0].alias, 'Alex');
-                    test.equals(players[0].uuid, 123456789);
-
-                    test.equals(players[1].alias, 'Mindi');
-                    test.equals(players[1].uuid, 456789123);
-
-                    test.equals(players[2].alias, 'Tim');
-                    test.equals(players[2].uuid, 987654321);
 
                     test.done();
                 });

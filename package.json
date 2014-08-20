@@ -19,7 +19,8 @@
     "restify": "2.8.2",
     "sequelize": "^1.7.9",
     "socket.io": "^1.0.6",
-    "sqlite3": "^2.2.7"
+    "sqlite3": "^2.2.7",
+    "node-uuid": "~1.4.1"
   },
   "devDependencies": {
     "nodeunit": "^0.9.0"

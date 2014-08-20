@@ -1,4 +1,5 @@
 var restify = require('restify');
+var uuid = require('node-uuid');
 
 function createClient() {
     return restify.createJsonClient({
@@ -27,10 +28,11 @@ module.exports = {
             });
     },
     testCreatePlayer: function (test) {
+        var playerId = uuid.v4();
         createClient().put(
             '/players',
             {
-                uuid: 1446914009
+                uuid: playerId
             },
             function (err, req, res, data) {
                 if (err) {
@@ -38,30 +40,32 @@ module.exports = {
                 } else {
                     test.equals(res.statusCode, 201);
                     test.ok(data instanceof Object);
-                    test.equals(data.uuid, 1446914009);
+                    test.equals(data.uuid, playerId);
                     test.done();
                 }
             });
     },
     testCreateAndRetrievePlayer: function (test) {
+        var playerId = uuid.v4();
+
         createClient().put(
             '/players',
             {
-                uuid: 1446914010,
+                uuid: playerId,
                 alias: 'Hoxton'
             },
             function (err, req, res, data) {
                 if (err) {
                     throw new Error(err);
                 } else {
-                    createClient().get('/players/1446914010', function (err, req, res, data) {
+                    createClient().get('/players/' + playerId, function (err, req, res, data) {
                         if (err) {
                             throw new Error(err);
                         } else {
                             test.equals(res.statusCode, 200);
                             test.ok(data instanceof Object);
                             test.equals(data.alias, 'Hoxton');
-                            test.equals(data.uuid, 1446914010);
+                            test.equals(data.uuid, playerId);
 
                             test.done();
                         }
@@ -84,9 +88,11 @@ module.exports = {
     },
 
     testAddCodes: function (test) {
+        var playerId = uuid.v4();
+
         createClient().put(
             '/players',
-            { uuid: 14469 },
+            { uuid: playerId },
             function (err, req, res, data) {
                 test.ok(!err);
                 createClient().put('/codes',
@@ -98,11 +104,11 @@ module.exports = {
                     function (err, req, res, data) {
                         test.ok(!err);
 
-                        createClient().put('/players/14469/' + data.id, {}, function (err, req, res, data) {
+                        createClient().put('/players/' + playerId + '/' + data.id, {}, function (err, req, res, data) {
                             test.ok(!err);
                             test.equals(res.statusCode, 201);
 
-                            createClient().get('/players/14469', function (err, req, res, data) {
+                            createClient().get('/players/' + playerId, function (err, req, res, data) {
                                 test.ok(!err);
                                 test.ok(data.scans instanceof Array);
                                 test.ok(data.scans.length > 0);
