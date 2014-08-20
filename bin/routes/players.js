@@ -74,6 +74,30 @@ module.exports = function (server) {
         });
     });
 
+    server.put('/players/:playerId/win', function (req, res, next) {
+
+        server.dao.playerDAO().setWinner(req.params.playerId, function (result, err) {
+            if (!err) {
+                res.send(201, result);
+            } else {
+                res.send(500, 'Database Error: ' + err);
+            }
+            return next();
+        });
+    });
+
+    server.put('/players/:playerId/oops', function (req, res, next) {
+
+        server.dao.playerDAO().removeWinner(req.params.playerId, function (result, err) {
+            if (!err) {
+                res.send(201, result);
+            } else {
+                res.send(500, 'Database Error: ' + err);
+            }
+            return next();
+        });
+    });
+
     server.put('/players/:playerId/:codeId', function (req, res, next) {
 
         server.dao.playerDAO().addScan(req.params.playerId, req.params.codeId, function (result, err) {

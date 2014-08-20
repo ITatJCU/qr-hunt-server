@@ -1,9 +1,10 @@
 var models = require('../../lib/dao/models.js');
 var Player = models.Player;
 var sequelize = models.sequelize;
+var uuid = require('node-uuid');
 
 var playerAlias = '';
-var fingerprint = 1446914009;
+var fingerprint = uuid.v4();
 
 module.exports = {
     setUp: function (callback) {
@@ -21,8 +22,11 @@ module.exports = {
     testCreate: function (test) {
 
         Player.findOrCreate(
-            { uuid: 1446914010}, { alias: 'Alex' }
+            { uuid: fingerprint}, { alias: 'Alex' }
         ).complete(function (err, player) {
+                test.equals(player.uuid, fingerprint);
+                test.equals(player.alias, 'Alex');
+
                 test.ok(!err);
                 test.done();
             });

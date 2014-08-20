@@ -122,5 +122,34 @@ module.exports = {
                     });
 
             });
+    },
+    testFlagWinner: function (test) {
+        var playerId = uuid.v4();
+
+        createClient().put(
+            '/players',
+            { uuid: playerId },
+            function (err, req, res, data) {
+                test.ok(!err);
+                createClient().put(
+                        '/players/' + playerId + '/win',
+                    null,
+                    function (err, req, res, data) {
+                        test.ok(!err);
+
+                        test.equals(data.previousWinner, true);
+
+                        createClient().put(
+                                '/players/' + playerId + '/oops',
+                            null,
+                            function (err, req, res, data) {
+                                test.ok(!err);
+
+                                test.equals(data.previousWinner, false);
+                                test.done();
+                            });
+                    });
+
+            });
     }
 };

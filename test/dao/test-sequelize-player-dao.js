@@ -73,7 +73,6 @@ module.exports = {
         var dao = new DAO(sequelize, Player);
 
 
-
         var dataSet = [
             {uuid: uuid.v4(), alias: 'Alex'},
             {uuid: uuid.v4(), alias: 'Tim'},
@@ -177,6 +176,26 @@ module.exports = {
                 test.equals(p.uuid, 100);
                 test.ok(current != p.resetAt);
                 test.done();
+            })
+        })
+    },
+
+    testWinners: function (test) {
+        var userId = uuid.v4();
+
+        var dao = new DAO(sequelize, Player);
+
+        dao.create({uuid: userId, alias: 'Player'}, function (player, err) {
+
+
+            dao.setWinner(player.uuid, function (p, e) {
+                test.equals(p.previousWinner, true);
+                test.equals(p.uuid, userId);
+                dao.removeWinner(player.uuid,function(p,e){
+                    test.equals(p.previousWinner, false);
+                    test.equals(p.uuid, userId);
+                    test.done();
+                })
             })
         })
     }
