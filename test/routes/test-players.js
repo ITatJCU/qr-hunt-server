@@ -54,7 +54,7 @@ module.exports = {
                 if (err) {
                     throw new Error(err);
                 } else {
-                    createClient().get('/player/1446914010', function (err, req, res, data) {
+                    createClient().get('/players/1446914010', function (err, req, res, data) {
                         if (err) {
                             throw new Error(err);
                         } else {
@@ -98,11 +98,11 @@ module.exports = {
                     function (err, req, res, data) {
                         test.ok(!err);
 
-                        createClient().put('/player/14469/' + data.id, {}, function (err, req, res, data) {
+                        createClient().put('/players/14469/' + data.id, {}, function (err, req, res, data) {
                             test.ok(!err);
                             test.equals(res.statusCode, 201);
 
-                            createClient().get('/player/14469', function (err, req, res, data) {
+                            createClient().get('/players/14469', function (err, req, res, data) {
                                 test.ok(!err);
                                 test.ok(data.scans instanceof Array);
                                 test.ok(data.scans.length > 0);
