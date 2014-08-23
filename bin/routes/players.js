@@ -64,7 +64,7 @@ module.exports = function (server) {
                 res.send(500, 'Database Error: ' + err);
             } else if (player) {
                 res.send(200, player);
-                updateCache(player.uuid, player);
+                setReloadRequired(player.uuid);
             } else {
                 res.send(404, 'Player not found');
             }
@@ -90,7 +90,7 @@ module.exports = function (server) {
             server.dao.playerDAO().create(player, function (createdPlayer, err) {
                 if (!err) {
                     res.send(201, createdPlayer);
-                    updateCache(createdPlayer.uuid, createdPlayer);
+                    setReloadRequired(result.uuid);
                 } else {
                     res.send(500, 'Database Error: ' + err);
                 }
@@ -106,7 +106,7 @@ module.exports = function (server) {
         server.dao.playerDAO().reset(req.params.playerId, function (result, err) {
             if (!err) {
                 res.send(201, result);
-                updateCache(result.uuid, result);
+                setReloadRequired(result.uuid);
             } else {
                 res.send(500, 'Database Error: ' + err);
             }
@@ -119,8 +119,7 @@ module.exports = function (server) {
         server.dao.playerDAO().setWinner(req.params.playerId, function (result, err) {
             if (!err) {
                 res.send(201, result);
-                updateCache(result.uuid, result);
-
+                setReloadRequired(result.uuid);
             } else {
                 res.send(500, 'Database Error: ' + err);
             }
@@ -133,8 +132,7 @@ module.exports = function (server) {
         server.dao.playerDAO().removeWinner(req.params.playerId, function (result, err) {
             if (!err) {
                 res.send(201, result);
-                updateCache(result.uuid, result);
-
+                setReloadRequired(result.uuid);
             } else {
                 res.send(500, 'Database Error: ' + err);
             }
@@ -152,7 +150,6 @@ module.exports = function (server) {
                 if (server.io) {
                     server.io.sockets.emit('newScan', null);
                 }
-                updateCache(result.uuid, result);
                 setReloadRequired(result.uuid);
             } else {
                 res.send(500, 'Database Error: ' + err);
