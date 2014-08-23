@@ -2,23 +2,60 @@ var LogEventDispatcher = require('../../lib/utilities/log-event-dispatcher');
 
 module.exports = function (server) {
 
+    server.cache['players'] = {};
+
+    var updateCache = function (uuid, player) {
+        player.lastCached = new Date();
+        player.reload = false;
+        server.cache['players'][uuid] = player;
+        LogEventDispatcher.log('Updating Player Cache: ' + uuid);
+    };
+
+    var getCached = function (uuid) {
+        return server.cache['players'][uuid];
+    };
+
+    var setReloadRequired = function (uuid) {
+        var p = getCached(uuid);
+        if (p) {
+            p.reload = true;
+            updateCache(p);
+        }
+    };
+
+    var needsUpdate = function (uuid) {
+        var p = getCached(uuid);
+        if (p) {
+            return p.reload;
+        } else {
+            return true;
+        }
+    };
     /**
      * Gets the player with the specified uuid
      * Note: Player UUID must be sent to distinguish.
      */
     server.get('/players/:id', function (req, res, next) {
 
-        server.dao.playerDAO().findById(req.params.id, function (player, err) {
-            if (err) {
-                res.send(500, 'Database Error: ' + err);
-            } else if (player) {
-                res.send(200, player);
-            } else {
-                res.send(404, 'Player not found');
-            }
-            return next();
-        });
+        if (needsUpdate(req.params.id)) {
+
+            server.dao.playerDAO().findById(req.params.id, function (player, err) {
+                if (err) {
+                    res.send(500, 'Database Error: ' + err);
+                } else if (player) {
+                    res.send(200, player);
+                    updateCache(req.params.id, player);
+                } else {
+                    res.send(404, 'Player not found');
+                }
+                return next();
+            });
+
+        } else {
+            res.send(200, getCached(req.params.id));
+        }
     });
+
     server.put('/players/:id', function (req, res, next) {
         var existingPlayer = req.params;
 
@@ -27,6 +64,7 @@ module.exports = function (server) {
                 res.send(500, 'Database Error: ' + err);
             } else if (player) {
                 res.send(200, player);
+                updateCache(player.uuid, player);
             } else {
                 res.send(404, 'Player not found');
             }
@@ -52,6 +90,7 @@ module.exports = function (server) {
             server.dao.playerDAO().create(player, function (createdPlayer, err) {
                 if (!err) {
                     res.send(201, createdPlayer);
+                    updateCache(createdPlayer.uuid, createdPlayer);
                 } else {
                     res.send(500, 'Database Error: ' + err);
                 }
@@ -67,6 +106,7 @@ module.exports = function (server) {
         server.dao.playerDAO().reset(req.params.playerId, function (result, err) {
             if (!err) {
                 res.send(201, result);
+                updateCache(result.uuid, result);
             } else {
                 res.send(500, 'Database Error: ' + err);
             }
@@ -79,6 +119,8 @@ module.exports = function (server) {
         server.dao.playerDAO().setWinner(req.params.playerId, function (result, err) {
             if (!err) {
                 res.send(201, result);
+                updateCache(result.uuid, result);
+
             } else {
                 res.send(500, 'Database Error: ' + err);
             }
@@ -91,6 +133,8 @@ module.exports = function (server) {
         server.dao.playerDAO().removeWinner(req.params.playerId, function (result, err) {
             if (!err) {
                 res.send(201, result);
+                updateCache(result.uuid, result);
+
             } else {
                 res.send(500, 'Database Error: ' + err);
             }
@@ -106,12 +150,12 @@ module.exports = function (server) {
                 if (server.io) {
                     server.io.sockets.emit('newScan', null);
                 }
+                server.cache.updateLeaderbaord = true;
+                updateCache(result.uuid, result);
             } else {
                 res.send(500, 'Database Error: ' + err);
             }
             return next();
         });
     });
-
-
 };

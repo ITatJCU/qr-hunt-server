@@ -186,8 +186,6 @@ module.exports = {
         var dao = new DAO(sequelize, Player);
 
         dao.create({uuid: userId, alias: 'Player'}, function (player, err) {
-
-
             dao.setWinner(player.uuid, function (p, e) {
                 test.equals(p.previousWinner, true);
                 test.equals(p.uuid, userId);

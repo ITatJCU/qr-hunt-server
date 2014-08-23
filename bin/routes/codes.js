@@ -1,3 +1,5 @@
+var LogEventDispatcher = require('../../lib/utilities/log-event-dispatcher');
+
 module.exports = function (server) {
 
     var lastCache = new Date(); //Initial cache time
@@ -8,13 +10,13 @@ module.exports = function (server) {
     var updateCache = function (results) {
         server.cache['codes'] = results;
         lastCache = new Date();
+        LogEventDispatcher.log('Updating Codes Cache.');
     };
 
     var getCache = function () {
         if (!server.cache['codes']) {
             server.cache['codes'] = [];
         }
-        console.log('gettingCache');
         return server.cache['codes'];
     };
 
