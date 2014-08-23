@@ -63,8 +63,9 @@ module.exports = function (server) {
             if (err) {
                 res.send(500, 'Database Error: ' + err);
             } else if (player) {
-                res.send(200, player);
                 setReloadRequired(player.uuid);
+                res.send(200, player);
+                server.cache.updateLeaderbaord = true; //Update on Alias update
             } else {
                 res.send(404, 'Player not found');
             }
