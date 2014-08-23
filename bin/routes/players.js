@@ -153,6 +153,7 @@ module.exports = function (server) {
                     server.io.sockets.emit('newScan', null);
                 }
                 updateCache(result.uuid, result);
+                setReloadRequired(result.uuid);
             } else {
                 res.send(500, 'Database Error: ' + err);
             }
