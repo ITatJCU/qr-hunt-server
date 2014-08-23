@@ -10,6 +10,8 @@ var dao = new DAO();
 dao.setFactory(new SequelizeDAO());
 server.dao = dao;
 
+server.cache = [];
+
 //Initialise the loggers
 require('../config/loggers')(server);
 

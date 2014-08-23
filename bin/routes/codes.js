@@ -1,18 +1,47 @@
 module.exports = function (server) {
 
+    var lastCache = new Date(); //Initial cache time
+    var cacheTime = 300000; // Cache codes for 5 minutes
+
+    var forceReload = false;
+
+    var updateCache = function (results) {
+        server.cache['codes'] = results;
+        lastCache = new Date();
+    };
+
+    var getCache = function () {
+        if (!server.cache['codes']) {
+            server.cache['codes'] = [];
+        }
+        console.log('gettingCache');
+        return server.cache['codes'];
+    };
+
+    var needsUpdate = function () {
+        var now = new Date();
+        return forceReload || (now.getTime() - lastCache.getTime()) > cacheTime;
+    };
+
     /**
      * Gets all available QR Codes from the database
      */
     server.get('/codes', function (req, res, next) {
-
-        server.dao.codeDAO().all(function (results, err) {
-            if (!err) {
-                res.send(200, results);
-            } else {
-                res.send(500, 'Database Error: ' + err);
-            }
+        if (needsUpdate() || getCache().length == 0) {
+            server.dao.codeDAO().all(function (results, err) {
+                if (!err) {
+                    updateCache(results);
+                    res.send(200, results);
+                } else {
+                    res.send(500, 'Database Error: ' + err);
+                }
+                return next();
+            });
+        }
+        else {
+            res.send(200, getCache());
             return next();
-        });
+        }
 
     });
 
@@ -38,6 +67,7 @@ module.exports = function (server) {
                 res.send(500, 'Database Error: ' + err);
             } else {
                 res.send(200, null);
+                forceReload = true;
             }
             return next();
         });
@@ -55,6 +85,7 @@ module.exports = function (server) {
             server.dao.codeDAO().save(code, function (result, err) {
                 if (!err) {
                     res.send(201, result);
+                    forceReload = true;
                 } else {
                     res.send(500, 'Database Error: ' + err);
                 }
@@ -64,6 +95,7 @@ module.exports = function (server) {
             server.dao.codeDAO().create(code, function (result, err) {
                 if (!err) {
                     res.send(201, result);
+                    forceReload = true;
                 } else {
                     res.send(500, 'Database Error: ' + err);
                 }
