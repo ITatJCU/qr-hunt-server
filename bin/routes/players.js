@@ -146,11 +146,12 @@ module.exports = function (server) {
 
         server.dao.playerDAO().addScan(req.params.playerId, req.params.codeId, function (result, err) {
             if (!err) {
+                server.cache.updateLeaderbaord = true;
                 res.send(201, result);
+
                 if (server.io) {
                     server.io.sockets.emit('newScan', null);
                 }
-                server.cache.updateLeaderbaord = true;
                 updateCache(result.uuid, result);
             } else {
                 res.send(500, 'Database Error: ' + err);
